@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-duo-green: #58cc02;
+  --color-duo-green-dark: #46a302;
+  --color-duo-blue: #1cb0f6;
+  --color-duo-blue-dark: #1899d6;
+  --color-duo-orange: #ff9600;
+  --color-duo-red: #ff4b4b;
+  --color-duo-yellow: #ffc800;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  background-color: #f7f7f7;
+  color: #4b4b4b;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.lesson-card {
+  @apply bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-[0_4px_0_0_#e5e5e5] transition-all;
+}
+
+.lesson-card:active {
+  @apply shadow-none translate-y-1;
+}
+
+.duo-button {
+  @apply px-6 py-3 rounded-2xl font-bold uppercase tracking-wider transition-all active:translate-y-1 active:shadow-none;
+}
+
+.duo-button-primary {
+  @apply bg-duo-green text-white shadow-[0_4px_0_0_#46a302] hover:bg-[#61de02];
+}
+
+.duo-button-secondary {
+  @apply bg-white text-duo-blue border-2 border-gray-200 shadow-[0_4px_0_0_#e5e5e5] hover:bg-gray-50;
+}
+
+.ipa-key {
+  @apply w-12 h-14 md:w-14 md:h-16 flex items-center justify-center text-xl font-medium bg-white border-2 border-gray-200 rounded-xl shadow-[0_3px_0_0_#e5e5e5] active:shadow-none active:translate-y-[2px] transition-all;
+}

@@ -1,0 +1,42 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User's gamified profile data",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "streak": { "type": "integer" },
+        "totalXp": { "type": "integer" },
+        "currentLessonId": { "type": "integer" },
+        "lastActiveAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email"]
+    },
+    "LessonProgress": {
+      "title": "Lesson Progress",
+      "description": "Tracks completion of a specific lesson",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "lessonId": { "type": "integer" },
+        "status": { "type": "string", "enum": ["locked", "available", "completed"] },
+        "bestScore": { "type": "integer" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "lessonId", "status"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile and global stats"
+    },
+    "users/{userId}/progress/{lessonId}": {
+      "schema": "LessonProgress",
+      "description": "Individual lesson progress for a user"
+    }
+  }
+}

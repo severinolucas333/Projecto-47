@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Validation Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+
+    // User Profile Rules
+    match /users/{userId} {
+      function isValidUser(data) {
+        return data.uid == request.auth.uid &&
+               data.displayName is string && data.displayName.size() <= 100 &&
+               data.email is string &&
+               data.streak >= 0 &&
+               data.totalXp >= 0 &&
+               data.currentLessonId >= 1;
+      }
+
+      allow get, write: if isOwner(userId) && (request.method == 'get' || isValidUser(request.resource.data));
+      allow update: if isOwner(userId) && isValidUser(request.resource.data) && (
+        request.resource.data.diff(resource.data).affectedKeys().hasAll(['totalXp', 'currentLessonId', 'lastActiveAt']) ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'lastActiveAt'])
+      );
+    }
+
+    // System connection test
+    match /system/connection-test {
+      allow get: if true;
+    }
+  }
+}
